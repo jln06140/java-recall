@@ -231,11 +231,84 @@ public class PlayingWithAlgo {
 	}
 
 	public static String longestWord(String text) {
-		return null;
+		String res="";
+		String retour="";
+		ArrayList <String> liste = new ArrayList<String>();
+		int indice = 0;
+		
+		for(int i=0; i<text.length(); i++) {					//on va traiter chaque caractere de la chaine passée en parametre
+			char c= text.charAt(i);								//si caractere	
+			if( Character.isLetterOrDigit(c) ) {				//si caractere est une lettre ou chiffre
+				res += c;										//on construit un string avec le mot
+			}
+			else if (!Character.isLetterOrDigit(c)) {			// si ce n'est pas caractere
+				if(i == text.length()) break;					//si on atteint le bout de la chaine alors on sort
+				else {
+					liste.add(res);								//sinon on ajoute chaine obtenur dans une liste et on remet res a 0
+					res="";
+				}
+			}
+		}
+		
+		int n = liste.get(0).length();
+		
+		
+		for(int i=0;i<liste.size();i++) {						//on compare premier element avec les autres
+			if (liste.get(i).length() > n) {
+				retour = liste.get(i);							//si la suivante plus grande alors on recupere la chaine
+				n = liste.get(i).length();						//et on compare les suivante avec celui recupéré
+			}
+		}
+		
+		
+		
+		return retour;
 	}
+	
 
 	public static String getAllLetters(String[] array) {
-		return null;
+		String res="",mot = "",retour="";
+		char c;
+		boolean retientLettre = true;
+		
+		for(int i=0;i<array.length;i++) {					//on concatene tous les mots du tableau en une phrase
+			mot += array[i];
+		}
+		
+		for(int i=0; i<mot.length(); i++) {				//on compare chaque lettre avec les suivantes
+			c = mot.charAt(i);
+			for(int j=i+1; j<mot.length(); j++) {
+				if(c == mot.charAt(j)) {					//si egalite on ne la retient pas(on retiendra que la derniere lettre identique dans le string) 
+					retientLettre = false;
+				}
+			}
+			if (retientLettre) res+=c;						//si pas de lettre identique alors on ecrit la lettre dans une autre variable
+			retientLettre =true;
+		}
+		
+		char tab[] = new char[res.length()];
+		
+		for(int i =0; i<res.length();i++) {					//on met string obtenu dans un tableau de caracteres
+			tab[i] = res.charAt(i);
+		}
+		
+		for(int i=0; i< tab.length; i++) {				//on remet ordre alphabetique dans le tableau obtenue precedement et on le met dans une chaine
+			for(int j=i+1; j<tab.length ; j++) {
+				char c1 = tab[i];
+				char c2 = tab[j];
+				if (c2<c1) {
+					char temp = c1;
+					tab[i] = c2;
+					tab[j] = temp;
+				}
+			}
+			retour +=tab[i];
+		}
+		
+		
+		
+		System.out.println(retour);
+		return retour;
 	}
 	
 	public static String removeCapitals(String text) {
