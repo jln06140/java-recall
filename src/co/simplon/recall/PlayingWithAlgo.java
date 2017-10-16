@@ -1,5 +1,10 @@
 package co.simplon.recall;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class PlayingWithAlgo {
@@ -312,11 +317,24 @@ public class PlayingWithAlgo {
 	}
 	
 	public static String removeCapitals(String text) {
-		return null;
+		String res = "";
+		
+		for(int i=0; i<text.length();i++) {
+			if(!Character.isUpperCase(text.charAt(i))) res+=text.charAt(i);
+		}
+		
+		return res;
 	}
 	
-	public static String formatDateNicely(String text) {
-		return null;
+	public static String formatDateNicely(String text) throws ParseException {
+		/*SimpleDateFormat dmyFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat dyFormat = new SimpleDateFormat("MM/dd/yyyy");
+		Date d = dmyFormat.parse("2016-10-04");
+		String res = dyFormat.format(d);*/
+		
+		String tab[] = text.split("-");
+		return (tab[2] +"/"+ tab[1] +"/"+ tab[0]);
+		
 	}
 	
 	public static String getDomainName(String email) {
@@ -324,7 +342,24 @@ public class PlayingWithAlgo {
 	}
 
 	public static String titleize(String title) {
-		return null;
+		String res="";
+		res+= Character.toUpperCase(title.charAt(0));								//premier lettre toujours en majuscule
+		for(int i =1; i<title.length()-1; i++) {
+			
+				char c1 = title.charAt(i);													
+				char c2 = title.charAt(i+1);										
+				if(!Character.isAlphabetic(c1) && Character.isAlphabetic(c2)) {		//si caractere autre que alphabelet et que suivant alphabet
+					res += c1+""+Character.toUpperCase(c2);							//alors on concatene premiere lettre et on met 2eme en capitale
+					i++;
+				}
+				else {
+					res+=c1;
+				}
+			
+		}
+		
+		return res;
+		
 	}
 	
 	public static boolean checkForSpecialCharacters(String string) {

@@ -1,6 +1,8 @@
 package co.simplon.recall;
 
 import static org.junit.Assert.*;
+
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -174,9 +176,10 @@ public class PlayingWithAlgoTest {
 	
 	/**
 	 * formats a date nicely
+	 * @throws ParseException 
 	 */
 	@Test
-	public void  formatDateNicely() {
+	public void  formatDateNicely() throws ParseException {
 		String text = "2016-10-04";
 		assertEquals("04/10/2016", PlayingWithAlgo.formatDateNicely(text));
 	}	
@@ -194,7 +197,7 @@ public class PlayingWithAlgoTest {
 	 * titleizes a string
 	 */
 	@Test
-	public void  titleize() {
+	public void titleize() {
 		assertEquals("The Lion the Witch and the Wardrobe", PlayingWithAlgo.titleize("the lion the witch and the wardrobe"));
 		assertEquals("The Lion the Witch. And the Wardrobe", PlayingWithAlgo.titleize("the lion the witch. and the wardrobe"));
 	}	
