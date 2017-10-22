@@ -343,18 +343,28 @@ public class PlayingWithAlgo {
 
 	public static String titleize(String title) {
 		String res="";
-		res+= Character.toUpperCase(title.charAt(0));								//premier lettre toujours en majuscule
-		for(int i =1; i<title.length()-1; i++) {
+		int iterateur =1;
+		boolean notAlphFound = false;
+		
+		if(Character.isAlphabetic(title.charAt(0))) res +=Character.toUpperCase(title.charAt(0));
+		else iterateur = 0;
+		
+		for(int i =iterateur; i<title.length(); i++) {
 			
-				char c1 = title.charAt(i);													
-				char c2 = title.charAt(i+1);										
-				if(!Character.isAlphabetic(c1) && Character.isAlphabetic(c2)) {		//si caractere autre que alphabelet et que suivant alphabet
-					res += c1+""+Character.toUpperCase(c2);							//alors on concatene premiere lettre et on met 2eme en capitale
-					i++;
-				}
-				else {
-					res+=c1;
-				}
+			while(!Character.isAlphabetic(title.charAt(i)) && i<=title.length()) {
+				
+				res+=title.charAt(i);
+				i++;
+				notAlphFound = true;
+			}
+			
+			if(notAlphFound) {
+				res+= Character.toUpperCase(title.charAt(i));
+				notAlphFound= false;
+			}
+			else {
+				res+=title.charAt(i);
+			}
 			
 		}
 		
@@ -375,35 +385,112 @@ public class PlayingWithAlgo {
 	}
 	
 	public static long addingTwoNumbers(long number1, long number2) {
-		return 0;
+		return (number1 + number2);
 	}
 
 	public static long addingThreeNumbers(long number1, long number2, long number3) {
-		return 0;
+		return (number1 + number2 +number3);
 	}
 
 	public static long addingSeveralNumbers(final long... numbers) {
-		return 0;
+		int res=0;
+		for(long a : numbers) {
+			res+=a;
+		}
+		return res;
 	}
 
 	public static int[] allElementsExceptFirstThree(int array[]) {
-		return null;
+		int res;
+		int []tab = new int [array.length-3];
+		for(int i=3; i<array.length;i++) {
+			tab[i-3] = array[i];
+		}
+		return tab;
 	}
 
 	public static int[] addElementToBeginning(int array[], int element) {
-		return null;
+		int tab[] = new int [array.length+1];
+		tab[0] = element;
+		for(int i=0; i<array.length; i++) {
+			tab[i+1]= array[i];
+		}
+		return tab;
 	}
 
 	public static Float makeNegative(Float number) {
-		return null;
+		if(number <0) return number;
+		else return (number-(number*2));
 	}
 
 	public static String[] getElementsLowerThanSix(String[] array) {
-		return null;
+				
+		String tab[] = enleveDoublon(new String [cptElementPlusPetitQue7(array)]);
+		croissantTab(tab);
+		return tab;
+		
+	
+	}
+	
+	public static String[] enleveDoublon(String[]array) {
+		boolean doublon=false;
+		ArrayList<String> liste = new ArrayList<String>();
+		
+		for(int i = 0; i< array.length; i++) {							//on compare chaque element avec les suivants
+			for(int j=i+1 ; i< array.length; j++) {						
+				if(array[i].equals(array[j])) {
+					doublon = true;										//si doublon alors variable doublon = true
+				}
+			}
+			if(!doublon) liste.add(array[i]);							//si il n'a pas de doublon alors on retient element
+			else doublon = false;
+		}
+		
+		String[]tab = new String [liste.size()];						//creation d'un tableau identique a la liste;
+		
+		for(int i=0; i<tab.length; i++) {
+			tab[i] = liste.get(i);
+		}
+		
+		return tab;
+	}
+	
+	public static void croissantTab(String tab[]) {
+		for(int i=0; i< tab.length-1; i++) {
+			for(int j=i+1; j<tab.length; j++) {
+				if(Integer.parseInt(tab[j]) > Integer.parseInt(tab[i])) {
+					String temp = tab[i];
+					tab[i] = tab[j];
+					tab[j] = temp;
+				}
+			}
+		}
+	}
+	
+	public static int cptElementPlusPetitQue7(String[] array) {
+		int cpt = 0;
+		for(String s : array) {
+			if(Integer.parseInt(s) < 7) {
+				cpt++;
+			}
+		}
+		
+		return cpt;
 	}
 	
 	public static int[] sortTabBySelection(int[] array) {
-		return null;
+		
+		for(int i=0; i<array.length-1; i++) {
+			for(int j =i+1; j< array.length; j++) {
+				if(array[j] < array[i]) {
+					int temp = array[i];
+					array[i] = array[j];
+					array[j] = temp;
+					
+				}
+			}
+		}
+		return array;
 	}
 	
 	public static int[] sortTabByInsertion(int[] array) {
@@ -419,138 +506,303 @@ public class PlayingWithAlgo {
 	}
 	
 	public static int roundUp(float number) {
-		return 0;
+		int arrondi = (int) Math.round(number);
+		return arrondi;
 	}
+	
+	public static boolean estBissextile(int annee) {										//fonction qui retourne true si année est bissesxtile
+		boolean estBissext = false;
+		if ((annee %4 == 0 && annee %100 != 0) || annee % 400 == 0) estBissext = true;
+		return estBissext;
+	}
+	
 
 	public static int findLastDayOfMonth(int month, int year) {
-		return 0;
+		int dernierJourDuMois= 30;
+		if(month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) dernierJourDuMois = 31;
+		else if(estBissextile(year) && month == 2) dernierJourDuMois = 29;
+		else if(month == 2) dernierJourDuMois = 28;
+		
+		
+		return dernierJourDuMois;
 	}
 
 	public static int factorial(int number) {
-		return 0;
+		int res = 1;
+		for(int i =2 ; i<=number; i++) res*=i;
+		return res;
 	}
 
 	public static int convertToCelsius(int temperature) {
-		return 0;
+		double temp = (double) temperature;
+		int enCelcius = (int)Math.ceil((temp - 32) * 5/9);
+		return enCelcius;
 	}
 	
 	public static boolean checkIfPair(int number) {
-		return false;
+		boolean estPair = false;
+		if(number % 2 == 0) estPair = true;
+		return estPair;
 	}
 	
 	public static boolean checkIfPairPairImpair(int number1, int number2, int number3) {
-		return false;
+		return (checkIfPair(number1) && checkIfPair(number2) && !checkIfPair(number3));
 	}
 	
 	public static boolean checkIfSumIsPair(int number1, int number2, int number3) {
-		return false;
+		boolean sommePaire = false;
+		if((number1 + number2 + number3) % 2 == 0) sommePaire = true;
+		return sommePaire;
 	}
 	
 	public static boolean checkIfAllElementsPair(int[] array) {
-		return false;
+		boolean toutPair = true;
+		for( int nb : array) {
+			if(nb % 2 != 0) toutPair =false;
+		}
+		return toutPair;
 	}
 	
 	public static ArrayList<Integer> exportAllElementsPair(int[] array) {
-		return null;
+		ArrayList<Integer> listePairElem = new ArrayList<Integer>();
+		for(int nb : array) {
+			if (nb % 2 == 0) listePairElem.add(nb);
+		}
+		return listePairElem;
 	}
 	
 	public static ArrayList<Integer> exportAllUniqueElementsPair(int[] array) {
-		return null;
+		ArrayList<Integer> listeUniquePairElem = new ArrayList<Integer>();
+		boolean ignoreChiffre = false;
+		for(int i = 0; i< array.length; i++) {									//compare chaque element
+			ignoreChiffre = false;
+			for(int j = i+1; j<array.length; j++ ) {							//avec elements suivant
+				if(array[i] == array[j]) ignoreChiffre = true;					// si element identique trouvé alors on ignore le chiffre a comparer
+			}
+			if(!ignoreChiffre && array[i]%2 == 0) listeUniquePairElem.add(array[i]);		//sinon on retient ce chiffre comparé si il est pair
+		}
+		
+		return listeUniquePairElem;
+	}
+	
+	public static int plusGrand(int n1,int n2, int n3) {									// fonction qui retourne nombre le plus grand
+		int [] tab = {n1, n2, n3};
+		int nbPlusGrand = tab[0];
+		for (int i = 1; i<tab.length; i++ ) {
+			if(nbPlusGrand<tab[i]) nbPlusGrand = tab[i];
+		}
+		return nbPlusGrand;
 	}
 	
 	public static boolean checkIfTriangleRectangle(int number1, int number2, int number3) {
-		return false;
+		boolean estRectangle = false;
+		int plusGrandNb = plusGrand(number1, number2, number3);
+		if (plusGrandNb == number1) {
+			if((number1 * number1) == (number2 * number2) + (number3 * number3)) estRectangle = true;
+		}
+		else if (plusGrandNb == number2) {
+			if((number2 * number2) == (number1 * number1) + (number3 * number3)) estRectangle = true;
+		}
+		else {
+			if((number3 * number3) == (number2 * number2) + (number1 * number1)) estRectangle = true;
+		}
+	
+		return estRectangle;
 	}
 	
 	public static boolean checkSiTuPeuxAcheter(int prix) {
+		boolean jePeux = false;
+		if(prix <= 22 && prix%2 == 0) jePeux = true;
 		// t'as 22 euros en monnaies de 2 euros, la machine ne rend pas de monnaie, check si tu peux payer
-		return false;
+		return jePeux;
 	}
 	
 	public static boolean checkCase1(double prix, int pourcentDeRemise) {
-		// t'as 100 euros, verifie si tu peux acheter l'article solde
-		return false;
+		boolean peuxAcheter = false;
+		double aDiviser = (double)pourcentDeRemise / 100;
+		if(prix * (1 - aDiviser)  <  100) peuxAcheter = true;
+		return peuxAcheter;
 	}
 	
 	public static boolean checkCase2(int number1, int number2) {
-		// check si une de 2 chiffres, ou leur somme se divise par 7
-		return false;
+		boolean divisiblePar7 = false;
+		if(number1 % 7 ==0 || number2 % 7 == 0 || (number1 + number2) % 7 == 0) divisiblePar7 = true;
+		return divisiblePar7;
 	}
 	
 	public static boolean checkCase2a(int number1, int number2) {
-		// check si une de 2 chiffres mais pas leur somme se divise par 7
-		return false;
+		boolean divisiblePar7 = false;
+		if(number1 % 7 == 0 && number2 % 7 == 0 ) divisiblePar7 = false;
+		else if (number1 % 7 == 0 || number2 % 7 == 0 ) divisiblePar7 = true;
+		return divisiblePar7;
 	}
 	
 	public static boolean checkCase3(int number1, int number2, int number3) {
-		// check si les trois chiffres sont dans l'ordre, soit croissant ou decroissant
-		return false;
+		boolean bonOrdre = false;
+		if(number1 < number2 && number2 < number3) bonOrdre = true;
+		else if (number1 > number2 && number2 > number3) bonOrdre = true;
+		return bonOrdre;
 	}
 	
 	public static ArrayList<Integer> allElementsExceptFirstAndLast(int array[]) {
-
-		return null;
+		ArrayList<Integer> listeSansFirstAndLast = new ArrayList<Integer>();
+		
+		for(int i=1; i< array.length-1; i++) {
+			listeSansFirstAndLast.add(array[i]);
+		}
+		return listeSansFirstAndLast;
 	}
 	
 	public static int[] allElementsExceptFirstAndLastInt(int array[]) {
-		return null;
+		
+		int [] tab = new int [array.length-2];
+		
+		for(int i=0; i< tab.length; i++) {
+			tab[i] = array[i+1];
+		}
+		
+		return tab;
 	}
 	
 	
 	public static ArrayList<Integer> allElementsWithIndexPair(int array[]) {
-		return null;
+		ArrayList<Integer> listeElemPair = new ArrayList<Integer>();
+		for(int i= 0; i<array.length; i++) {
+			if(i%2 == 0) listeElemPair.add(array[i]);
+		}
+		
+		return listeElemPair;
 	}
 	
 	public static ArrayList<Integer> reverseOrder(int array[]) {
-		return null;
+		ArrayList<Integer> listeInversée = new ArrayList<Integer>();
+		
+			for(int j =array.length-1; j >=0 ; j--) {
+				listeInversée.add(array[j]);
+			}
+		return listeInversée;
 	}
 	
 	public static int[] reverseOrderInt(int array[]) {
-		return null;
+		int [] tableauSortie = new int [array.length];
+		int ind = array.length-1;
+			for(int j =0; j <array.length ; j++) {						//parcourt la liste en ordre inverse
+				tableauSortie[j] = array[ind];							//et ajoute element dans un arraylist a chaque boucle
+				ind--;
+			}
+		return tableauSortie;
 	}
 	
 	public static ArrayList<Integer> insertElementInTheMiddleOfAnArray(int array[], int element ) {
-		return null;
+		ArrayList <Integer> listeAvecAjoutMilieu = new ArrayList<Integer>();		//creation arraylist
+		double tailleListe = (double)array.length;
+		int indice = (int) Math.floor(tailleListe/2);								//on divise taille tableau par 2
+		int cpt=0;
+		
+		for(int t : array) {
+			listeAvecAjoutMilieu.add(t);											//on ajoute chaque element du tableau dans arrayliste
+			cpt++;																	//on increment cpt pour qu'il corresponde a l'indice arraylist
+			if(indice == cpt) listeAvecAjoutMilieu.add(element);					//si compteur egal a l'indice alors on ajoute element
+		}
+	
+		return listeAvecAjoutMilieu;
 	}
 	
 	public static ArrayList<Integer> exportElementsPair( ArrayList<Integer> list ) {
+		ArrayList <Integer> listeElemPair = new ArrayList<Integer>();
+		for(int i=0; i< list.size(); i++) {
+			if (list.get(i)%2 == 0) listeElemPair.add(list.get(i));
+		}
 		
-		return null;
+		return listeElemPair;
 	}
 	
 	public static ArrayList<Integer> exportElementsWithIndexPair( ArrayList<Integer> list ) {
-		return null;
+		ArrayList <Integer> listIndPair = new ArrayList<Integer>();
+		for(int i=0; i< list.size(); i++) {
+			if (i%2 == 0) listIndPair.add(list.get(i));
+		}
+		
+		return listIndPair;
 	}
 	
 	public static int Addition( HashMap<String, Integer> addition ) {
+		int somme = 0;
+		for (Integer integer : addition) {
+			
+		}
 		return 0;
 	}
 	
 	public static boolean checkIfStringStartsWithA( String word ) {
-		return false;
+		char firstChar = word.charAt(0);
+		return (firstChar == 'a' || firstChar == 'A');
 	}
 	
 	public static boolean checkIfStringStartsWithVowel( String word ) {
-		return false;
+		return estVoyelle(word.charAt(0));
+	}
+	
+	public static boolean estVoyelle(char c) {
+		boolean voyelle = false;
+		char tab[] = {'a','e','i','o','u','y','A','E','I','O','U','Y'};
+		for(char tabVoyelle : tab) {
+			if (c == tabVoyelle) voyelle = true;
+		}
+		return voyelle;
 	}
 	
 	public static boolean checkIfStringEndsWithS( String word ) {
-		return false;
+		char lastChar = word.charAt(word.length()-1);
+		return (lastChar == 'S' || lastChar == 's');
 	}
 	
 	public static String findShortestWord(String[] array ) {
+		int tailleMot = array[0].length();							//je retiens la taille du premier mot
+		int indice =0;												//ainsi que son indice
+		for(int i=1; i<array.length; i++){
+			if(array[i].length() < tailleMot) {						//je compare sa taille avec les suivants
+				indice = i;											//des que je trouve une taille plus petite que celle retenue
+				tailleMot = array[i].length();
+			}														//alors je remplace "taillMot" par nouvelle taille 
+		}															//et retiens son indice
+		return array[indice];										//et je retourne
 		
-		return null;
 	}
 	
 	public static String swapFirstandLastLetter(String array ) {
+			String res="";
+			
+			if(array.length() >1) {
+				char fin = array.charAt(array.length()-1);
+				char debut = array.charAt(0);
+				res+= fin;
+				for(int i = 1; i<= array.length()-2; i++) {
+					res+=array.charAt(i);
+				}
+				res+=debut;
+			}
+			else {
+				for(int i=0; i<array.length();i++) {
+					res+=array.charAt(i);
+				}
+			}
+			return res;
 		
-		return null;
 	}
 	
 	public static int[] swapFirstandLastElement(int[] array ) {
+		int [] temp = new int [array.length];
+		for(int i =0; i<array.length; i++) {
+			temp[i] = array[i];
+		}
 		
-		return null;
+		if(temp.length >2) {
+			int tempo = temp[0];
+			temp[0] = temp[temp.length-1];
+			temp[temp.length-1] = tempo;
+		}
+		return temp;
 	}
 
 }
