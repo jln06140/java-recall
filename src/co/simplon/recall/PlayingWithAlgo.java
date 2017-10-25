@@ -373,7 +373,12 @@ public class PlayingWithAlgo {
 	}
 	
 	public static boolean checkForSpecialCharacters(String string) {
-		return false;
+		boolean caractereSpecial = false;
+		for(int i = 0; i< string.length(); i++) {
+			char lettre = string.charAt(i);
+			if( !(Character.isAlphabetic(lettre) || Character.isDigit(lettre))) caractereSpecial = true;
+		}
+		return caractereSpecial;
 	}
 	
 	public static String[] findAnagrams(String name) {
@@ -381,7 +386,17 @@ public class PlayingWithAlgo {
 	}
 
 	public static int[] letterPosition(String name) {
-		return null;
+		int [] tabPositionLettres = new int [name.length()];
+		char letter;
+		for(int i = 0; i< name.length(); i++) {
+			letter = name.charAt(i);										
+		    if(letter>='A' && letter<='Z')										//si lettre est majuscule alors on soustrait cette lettre
+		        tabPositionLettres[i] = (int)letter - 'A'+1;					//par son code ASCII auqeul on ajoute 1
+		    if(letter>='a' && letter<= 'z')										// idem pour lettre minuscule
+		    	tabPositionLettres[i] = (int)letter - 'a'+1;
+			
+		}
+		return tabPositionLettres;
 	}
 	
 	public static long addingTwoNumbers(long number1, long number2) {
@@ -501,12 +516,16 @@ public class PlayingWithAlgo {
 		return null;
 	}
 	
-	public static int findIndexByDichotomy(int elemet, int[] array) {
-		return 0;
+	public static int findIndexByDichotomy(int element, int[] array) {
+		int elem = -1;
+		for(int i=0; i< array.length; i++) {					//retourne indice de l'element si il est present
+			if(array[i] == element) elem = i;					//si pas element alors retourne -1
+		}
+		return elem;
 	}
 	
 	public static int roundUp(float number) {
-		int arrondi = (int) Math.round(number);
+		int arrondi = (int) Math.round(number);					//arrondi float a la virgule
 		return arrondi;
 	}
 	
