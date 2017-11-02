@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PlayingWithAlgo {
 	
@@ -36,9 +38,10 @@ public class PlayingWithAlgo {
 	
 	public static List<String> selectElementsStartingWithVowel(String array[]) {
 		ArrayList <String> liste = new ArrayList <String>();
-		for (int i=0 ; i<array.length; i++) {
-			char c = array[i].charAt(i);
-			if(c == 'a'  || c =='e' || c =='i' || c =='o' || c =='u'  || c =='y' )liste.add(array[i]);
+		String [] arraySansNull = removeNullElements(array);
+		for (int i=0 ; i<arraySansNull.length; i++) {
+			char c = arraySansNull[i].charAt(0);
+			if(c == 'a'  || c =='e' || c =='i' || c =='o' || c =='u'  || c =='y' )liste.add(arraySansNull[i]);
 		}
 		
 		return liste;
@@ -137,30 +140,31 @@ public class PlayingWithAlgo {
 	}
 
 	//ecrit mots contenant lettres passées en parametre
-	public static String exportWordWithoutALetter(String array[], char letter) {
+	public static String exportWordWithoutALetter(String arrayParam[], char letter) {
 		String res ="";
 		String concatene = "";
-		char c,t1;
+		String[] array = removeNullElements(arrayParam);
 		
 		for(int i=0; i<array.length; i++) {
-			for(int j=0; j<array[i].length(); j++) {
-				c= array[i].charAt(j);
-				if (Character.isLowerCase(c)) t1 = Character.toUpperCase(c);
-				else t1 = Character.toLowerCase(c);
-				
-				if(array[i].charAt(i) == c  ||  array[i].charAt(i) == t1) {
-					concatene = "";
-					break;
-				}
-				else concatene += array[i].charAt(j);
+			if(!lettrePresenteDansMot(array[i], letter)){
+				res+=array[i];
+				res += concatene+", ";
 			}
-			res += concatene+", ";
-			
 		}
 		res = res.substring(0, res.length()-2);
 		
 		
 		return res;
+	}
+	
+	public static boolean lettrePresenteDansMot(String mot, char lettre) {
+		boolean contientLettre = false;
+		for(int i =0; i< mot.length(); i++) {
+			if( Character.toLowerCase(mot.charAt(i)) == Character.toLowerCase(lettre)) {
+				contientLettre = true;
+			}
+		}
+		return contientLettre;
 	}
 
 	public static int numberOfPalindromeWord(String text) {
@@ -188,7 +192,7 @@ public class PlayingWithAlgo {
 
 	public static int numberOfPalindromeText(String text) {
 		String tab[] = text.split(",");
-		for(int i=0; i<tab.length; i++) {								//on eneleve tous les caractere autres que lettre et on les met dans un tableau
+		for(int i=0; i<tab.length; i++) {								//on enleve tous les caractere autres que lettre et on les met dans un tableau
 			tab[i] = tab[i].replaceAll("[^a-zA-Z]", "");
 			System.out.println(tab[i]);
 			
@@ -338,38 +342,63 @@ public class PlayingWithAlgo {
 	}
 	
 	public static String getDomainName(String email) {
+		 String patternStr = "([^0-9 * +)\\p{Space}+[0-9]+.*";
+		
+		
+		Pattern p = Pattern.compile("@?");
+		Matcher match = p.matcher(email);
+		int debut = match.start();
+		System.out.println(debut);
 		return null;
 	}
 
-	public static String titleize(String title) {
+	public static String titleize(String title ) {
 		String res="";
+		String motThe="";
 		int iterateur =1;
-		boolean notAlphFound = false;
 		
-		if(Character.isAlphabetic(title.charAt(0))) res +=Character.toUpperCase(title.charAt(0));
+		//Si premiere lettre est un caractere alors on uppercase
+		if(Character.isAlphabetic(title.charAt(0))) {			
+			res +=Character.toUpperCase(title.charAt(0));
+			//on retient les lettres au fur et a mesure afin de detecter presence de "the"
+			motThe+= res;
+		}
 		else iterateur = 0;
 		
+		
+		//on boucle sur le reste des caracteres de la chaine
 		for(int i =iterateur; i<title.length(); i++) {
+			char caractere = title.charAt(i);
+			motThe+= caractere;
 			
-			while(!Character.isAlphabetic(title.charAt(i)) && i<=title.length()) {
+			//si caractere est alphabet alors on concatene le caractere
+			if(Character.isAlphabetic(caractere)) res+=caractere;
+			
+			//si caractere est autre que lettre alphabet 
+			if(!Character.isAlphabetic(caractere) && i<=title.length()) {
+				String motTheLow = motThe.toLowerCase().trim();
 				
-				res+=title.charAt(i);
-				i++;
-				notAlphFound = true;
+				//tant que le caractere n'est pas lettre alphabet
+				while(!Character.isAlphabetic(title.charAt(i))){
+					res+= title.charAt(i);
+					i++;
+					
+					//si le mot retenu est egal a "the" ou a un point alors on majuscule le caractere suivant
+					if((motTheLow.equals("the") || motTheLow.charAt(motTheLow.length()-1) == '.') && Character.isAlphabetic(title.charAt(i)) ) {
+						res+= Character.toUpperCase(title.charAt(i));
+						motThe = "";
+					}
+					else {  
+						//sinon si caractere est lettre alphabet, on concatene le caractere et on reinitialise nouveux mot a retenir
+						if(Character.isAlphabetic(title.charAt(i))) {
+							motThe=""+title.charAt(i);
+							res+=title.charAt(i);
+						}
+					}
+				}
 			}
-			
-			if(notAlphFound) {
-				res+= Character.toUpperCase(title.charAt(i));
-				notAlphFound= false;
-			}
-			else {
-				res+=title.charAt(i);
-			}
-			
 		}
-		
 		return res;
-		
 	}
 	
 	public static boolean checkForSpecialCharacters(String string) {
@@ -747,10 +776,10 @@ public class PlayingWithAlgo {
 	
 	public static int Addition( HashMap<String, Integer> addition ) {
 		int somme = 0;
-		for (Integer integer : addition) {
-			
+		for (Map.Entry<String,Integer> e : addition.entrySet()){
+		    somme += e.getValue();
 		}
-		return 0;
+		return somme;
 	}
 	
 	public static boolean checkIfStringStartsWithA( String word ) {
